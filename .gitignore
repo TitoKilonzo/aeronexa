@@ -1,0 +1,14 @@
+node_modules
+dist
+.env
+.env.local
+.env.example
+.env.*
+!.env.example
+.firebase
+.firebase-debug.log
+.DS_Store
+coverage
+*.log
+service-account*.json
+service-account.json

@@ -1,0 +1,30 @@
+{
+  "name": "aeronexa",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace @aeronexa/api\" \"npm run dev --workspace @aeronexa/web\"",
+    "dev:web": "npm run dev --workspace @aeronexa/web",
+    "dev:api": "npm run dev --workspace @aeronexa/api",
+    "build": "npm run build --workspace @aeronexa/shared && npm run build --workspace @aeronexa/api && npm run build --workspace @aeronexa/web",
+    "typecheck": "npm run typecheck --workspace @aeronexa/api && npm run typecheck --workspace @aeronexa/web",
+    "seed:demo": "npm run seed:demo --workspace @aeronexa/api",
+    "test": "npm run test --workspace @aeronexa/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "typescript": "~5.9.3"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "1.14.7",
+    "gaxios@7": "7.3.1",
+    "glob": "14.0.4"
+  }
+}

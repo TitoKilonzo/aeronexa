@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+    function isPlatformAdmin() { return signedIn() && request.auth.token.platformRole == 'platform_admin'; }
+    function memberOf(orgId) {
+      return signedIn() && exists(/databases/$(database)/documents/organizations/$(orgId)/members/$(request.auth.uid));
+    }
+    function activeMemberOf(orgId) {
+      return memberOf(orgId) && get(/databases/$(database)/documents/organizations/$(orgId)/members/$(request.auth.uid)).data.status == 'active';
+    }
+
+    match /users/{uid} {
+      allow read: if isSelf(uid) || isPlatformAdmin();
+      allow create: if isSelf(uid)
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'displayName', 'createdAt', 'status'])
+        && request.resource.data.uid == uid
+        && request.resource.data.status == 'active';
+      allow update: if isSelf(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'phoneNumber', 'photoURL', 'updatedAt']);
+      allow delete: if false;
+    }
+
+    match /organizations/{orgId} {
+      allow read: if activeMemberOf(orgId) || isPlatformAdmin();
+      allow write: if false;
+      match /members/{uid} {
+        allow read: if isSelf(uid) || activeMemberOf(orgId) || isPlatformAdmin();
+        allow write: if false;
+      }
+      match /{document=**} { allow read, write: if false; }
+    }
+
+    match /airports/{airportId} { allow read: if true; allow write: if isPlatformAdmin(); }
+    match /flights/{flightId} { allow read: if resource.data.visibility == 'public' || isPlatformAdmin(); allow write: if false; }
+    match /flight_inventory/{inventoryId} { allow read: if resource.data.visibility == 'public' || isPlatformAdmin(); allow write: if false; }
+
+    match /bookings/{bookingId} { allow read, write: if false; }
+    match /seat_holds/{holdId} { allow read, write: if false; }
+    match /payments/{paymentId} { allow read, write: if false; }
+    match /tickets/{ticketId} { allow read, write: if false; }
+    match /passengers/{passengerId} { allow read, write: if false; }
+    match /travel_documents/{documentId} { allow read, write: if false; }
+    match /organization_invitations/{invitationId} { allow read, write: if false; }
+    match /notifications/{notificationId} { allow read, write: if false; }
+    match /audit_logs/{logId} { allow read, write: if false; }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

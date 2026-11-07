@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@theme {
+  --color-navy: #10243A;
+  --color-aviation: #1769AA;
+  --color-sky: #EAF5FF;
+  --color-gold: #E6AE45;
+  --font-sans: "DM Sans", sans-serif;
+  --font-display: "Manrope", sans-serif;
+}
+:root { font-family: "DM Sans", sans-serif; color: #17283b; background: #fff; font-synthesis: none; text-rendering: optimizeLegibility; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+h1,h2,h3,h4 { font-family: "Manrope", sans-serif; letter-spacing: -.035em; }
+button,input,select,textarea { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+:focus-visible { outline: 3px solid rgba(23,105,170,.38); outline-offset: 3px; }
+::selection { background: #d7ecff; color: #10243a; }
+.container-wide { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
+.soft-shadow { box-shadow: 0 18px 55px rgba(16,36,58,.10); }
+.form-input { display: block; width: 100%; min-height: 46px; border: 1px solid #dbe4ee; border-radius: 12px; background: #fff; padding: 10px 13px; color: #17283b; font-size: 14px; transition: border-color .16s ease, box-shadow .16s ease; }
+.form-input::placeholder { color: #9aa8b8; }
+.form-input:focus { outline: none; border-color: #1769aa; box-shadow: 0 0 0 3px rgba(23,105,170,.12); }
+.form-input:disabled { color: #7f8b99; cursor: not-allowed; }
+input[type="date"] { color-scheme: light; }
+@media (max-width: 640px) { .container-wide { width: min(100% - 32px, 1180px); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
